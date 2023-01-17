@@ -286,7 +286,7 @@ public class PspdfkitPlugin
             case "setFormFieldValue":
                 String value = call.argument("value");
                 fullyQualifiedName = call.argument("fullyQualifiedName");
-
+           
                 requireNotNullNotEmpty(value, "Value");
                 requireNotNullNotEmpty(fullyQualifiedName, "Fully qualified name");
                 document =
@@ -484,6 +484,11 @@ public class PspdfkitPlugin
                         options,
                         result
                 );
+                break;
+            }
+            case "getPageIndex": {
+                     FlutterPdfActivity fl = new FlutterPdfActivity();
+                   result.success(fl.getPageIndex());
                 break;
             }
             default:

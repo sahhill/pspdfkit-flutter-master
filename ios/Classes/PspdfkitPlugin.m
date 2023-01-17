@@ -34,11 +34,14 @@ PSPDFSettingKey const PSPDFSettingKeyHybridEnvironment = @"com.pspdfkit.hybrid-e
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(spreadIndexDidChange:) name:PSPDFDocumentViewControllerSpreadIndexDidChangeNotification object:nil];
     if ([@"frameworkVersion" isEqualToString:call.method]) {
         result([@"iOS " stringByAppendingString:PSPDFKitGlobal.versionNumber]);
     } else if ([@"setLicenseKey" isEqualToString:call.method]) {
+        
         NSString *licenseKey = call.arguments[@"licenseKey"];
         [PSPDFKitGlobal setLicenseKey:licenseKey options:@{PSPDFSettingKeyHybridEnvironment: @"Flutter"}];
+       
     } else if ([@"setLicenseKeys" isEqualToString:call.method]) {
         NSString *iOSLicenseKey = call.arguments[@"iOSLicenseKey"];
         [PSPDFKitGlobal setLicenseKey:iOSLicenseKey options:@{PSPDFSettingKeyHybridEnvironment: @"Flutter"}];
@@ -117,6 +120,13 @@ PSPDFSettingKey const PSPDFSettingKeyHybridEnvironment = @"com.pspdfkit.hybrid-e
     // Don't hold on to the view controller object after dismissal.
     self.pdfViewController = nil;
     [channel invokeMethod:@"pdfViewControllerDidDismiss" arguments:nil];
+}
+
+- (void)spreadIndexDidChange:(NSNotification *)notification {
+    long oldPageIndex = [notification.userInfo[@"PSPDFDocumentViewControllerOldSpreadIndexKey"] longValue];
+    long currentPageIndex = [notification.userInfo[@"PSPDFDocumentViewControllerSpreadIndexKey"] longValue];
+    NSMutableDictionary *pageIndices = @{@"oldPageIndex": @(oldPageIndex), @"currentPageIndex": @(currentPageIndex)};
+    [channel invokeMethod:@"spreadIndexDidChange" arguments:pageIndices];
 }
 
 @end

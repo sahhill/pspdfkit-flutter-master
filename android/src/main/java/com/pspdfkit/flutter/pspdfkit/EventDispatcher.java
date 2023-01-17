@@ -46,9 +46,18 @@ public class EventDispatcher {
         sendEvent("flutterPdfActivityOnPause");
     }
 
+    public void notifyPageChange(@NonNull final int pageIndex){
+        sendPageUpdateEvent("pageIndexDidChange", pageIndex);
+    }
+
     private void sendEvent(@NonNull final String method) {
         if (channel != null) {
             channel.invokeMethod(method, null, null);
+        }
+    }
+        private void sendPageUpdateEvent(@NonNull final String method, @NonNull final int pageIndex) {
+        if (channel != null) {
+            channel.invokeMethod(method, pageIndex);
         }
     }
 }

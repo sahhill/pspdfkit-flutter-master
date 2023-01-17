@@ -11,7 +11,8 @@ import com.pspdfkit.ui.PdfActivity;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.flutter.plugin.common.MethodChannel.Result;
-
+import android.util.Log;
+import android.widget.Toast;  
 /**
  * For communication with the PSPDFKit plugin, we keep a static reference to the current
  * activity.
@@ -23,6 +24,13 @@ public class FlutterPdfActivity extends PdfActivity {
 
     public static void setLoadedDocumentResult(Result result) {
         loadedDocumentResult.set(result);
+    }
+
+    @Override
+    public int getPageIndex() {
+        
+
+        
     }
 
     @Override
@@ -46,11 +54,13 @@ public class FlutterPdfActivity extends PdfActivity {
 
     @Override
     public void onDocumentLoaded(@NonNull PdfDocument pdfDocument) {
-        super.onDocumentLoaded(pdfDocument);
-        Result result = loadedDocumentResult.getAndSet(null);
-        if (result != null) {
-            result.success(true);
-        }
+        //        Toast.makeText(this, String.format("Document has been loaded with %d pages",
+        //     pdfDocument.getPageCount()), Toast.LENGTH_SHORT).show();
+        // super.onDocumentLoaded(pdfDocument);
+        // Result result = loadedDocumentResult.getAndSet(null);
+        // if (result != null) {
+        //     result.success(true);
+        // }
     }
 
     @Override
@@ -62,6 +72,8 @@ public class FlutterPdfActivity extends PdfActivity {
         }
     }
 
+
+
     private void bindActivity() {
         currentActivity = this;
     }
@@ -72,6 +84,18 @@ public class FlutterPdfActivity extends PdfActivity {
             result.success(false);
         }
         currentActivity = null;
+    }
+
+    @Override
+    public void onPageChanged(@NonNull PdfDocument document, int pageIndex) {
+        // super.onPageChanged();
+        Log.i("PSPDFKitPlugin", "onPageChanged" + pageIndex);
+
+        // Result result = loadedDocumentResult.getAndSet(null);
+        // if (result != null) {
+        //     result.success(true);
+        // }
+        EventDispatcher.getInstance().notifyPageChange(pageIndex);
     }
 
     @Nullable

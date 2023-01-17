@@ -41,6 +41,10 @@ class Pspdfkit {
   static Future<String?> get frameworkVersion async =>
       _channel.invokeMethod('frameworkVersion');
 
+    /// Gets the PSPDFKit framework version.
+   Future<String?> get getPageIndex async =>
+      _channel.invokeMethod('getPageIndex');
+
   /// Sets the license key.
   static Future<void> setLicenseKey(String licenseKey) async =>
       await _channel.invokeMethod(
@@ -194,9 +198,12 @@ class Pspdfkit {
   static late VoidCallback flutterPdfActivityOnPause;
   static late VoidCallback pdfViewControllerWillDismiss;
   static late VoidCallback pdfViewControllerDidDismiss;
+  static late void Function(dynamic) spreadIndexDidChange;
+  static late void Function(int) pageIndexDidChange;
 
   static Future<void> _platformCallHandler(MethodCall call) {
     try {
+      debugPrint("method is ${call.method}");
       switch (call.method) {
         case 'flutterPdfActivityOnPause':
           flutterPdfActivityOnPause();
@@ -207,6 +214,12 @@ class Pspdfkit {
         case 'pdfViewControllerDidDismiss':
           pdfViewControllerDidDismiss();
           break;
+        case 'spreadIndexDidChange':
+          spreadIndexDidChange(call.arguments);
+          break;
+        case 'pageIndexDidChange':
+          pageIndexDidChange(call.arguments);
+          break;
         default:
           if (kDebugMode) {
             print('Unknowm method ${call.method} ');
@@ -214,7 +227,7 @@ class Pspdfkit {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        print("error is $e");
       }
     }
     return Future.value();

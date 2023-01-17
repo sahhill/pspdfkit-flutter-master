@@ -563,7 +563,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     initPlatformState();
-    annotationsExample();
+    // annotationsExample();
   }
 
   @override
@@ -633,6 +633,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print('pdfViewControllerDidDismissHandler');
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     Pspdfkit.flutterPdfActivityOnPause =
@@ -641,6 +643,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         () => pdfViewControllerWillDismissHandler();
     Pspdfkit.pdfViewControllerDidDismiss =
         () => pdfViewControllerDidDismissHandler();
+
 
     currentTheme = MediaQuery.of(context).platformBrightness == Brightness.light
         ? lightTheme

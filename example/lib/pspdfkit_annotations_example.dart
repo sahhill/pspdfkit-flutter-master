@@ -129,10 +129,23 @@ class _PspdfkitAnnotationsExampleWidgetState
 	"rotation": 0
 }''';
 
+  void spreadIndexDidChangeHandler(dynamic arguments) {
+    print('yooo' + arguments.toString());
+  }
+
+  @override
+  void didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('yooo' + {await Pspdfkit().getPageIndex}.toString());
+  }
+
   int pageIndex = 1;
   @override
   Widget build(BuildContext context) {
-    view.addAnnotation(jsonAnnotation)
+    // Pspdfkit.pageIndexDidChange =
+    // (dynamic arguments) => spreadIndexDidChangeHandler(arguments);
+    // view.addAnnotation(jsonAnnotation);
     // This is used in the platform side to register the view.
     const String viewType = 'com.pspdfkit.widget';
     // Pass parameters to the platform side.

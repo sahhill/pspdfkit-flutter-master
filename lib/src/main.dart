@@ -191,6 +191,11 @@ class Pspdfkit {
   static late VoidCallback pdfViewControllerWillDismiss;
   static late VoidCallback pdfViewControllerDidDismiss;
 
+
+  void spreadIndexDidChangeHandler(dynamic arguments) {
+    print(arguments);
+}
+
   static Future<void> _platformCallHandler(MethodCall call) {
     try {
       switch (call.method) {
@@ -203,6 +208,7 @@ class Pspdfkit {
         case 'pdfViewControllerDidDismiss':
           pdfViewControllerDidDismiss();
           break;
+
         default:
           print('Unknown method ${call.method} ');
       }
