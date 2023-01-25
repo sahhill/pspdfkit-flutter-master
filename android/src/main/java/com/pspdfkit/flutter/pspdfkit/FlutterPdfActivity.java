@@ -26,12 +26,6 @@ public class FlutterPdfActivity extends PdfActivity {
         loadedDocumentResult.set(result);
     }
 
-    @Override
-    public int getPageIndex() {
-        
-
-        
-    }
 
     @Override
     protected void onCreate(Bundle bundle) {

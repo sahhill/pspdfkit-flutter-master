@@ -161,263 +161,211 @@ class _PspdfkitAnnotationsExampleWidgetState
         child: Scaffold(
             extendBodyBehindAppBar: PlatformUtils.isAndroid(),
             // appBar: AppBar(),
-            body: Listener(
-              onPointerMove: (moveEvent) {
-                if (moveEvent.delta.dx > 30) {
-                  if (pageIndex > 0) {
-                    EasyDebounce.debounce(
-                        'decrement', // <-- An ID for this particular debouncer
-                        Duration(
-                            milliseconds: 100), // <-- The debounce duration
-                        () => pageIndex-- // <-- The target method
-                        );
-                  }
-                  print("swipe right $pageIndex ${moveEvent.delta.dx}");
-                }
-
-                if (moveEvent.delta.dx < -30) {
-                  EasyDebounce.debounce(
-                      'increment', // <-- An ID for this particular debouncer
-                      Duration(milliseconds: 100), // <-- The debounce duration
-                      () => pageIndex++ // <-- The target method
-                      );
-                  print("swipe left $pageIndex ${moveEvent.delta.dx}");
-                }
-              },
-              child: SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: EasyContainer(
-                      child: Row(children: <Widget>[
-                    Flexible(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Center(child: Text("Questions")),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Text(
-                              "Section A",
-                              style: TextStyle(
-                                  color: Colors.blue[800], fontSize: 24),
-                            ),
-                            Card(
-                              child: Column(
-                                children: [
-                                  EasyContainer(
-                                    alignment: Alignment.topLeft,
-                                    color: Colors.blue[600],
-                                    child: Text(
-                                      'Q1',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+            body: SafeArea(
+                top: false,
+                bottom: false,
+                child: EasyContainer(
+                    child: Row(children: <Widget>[
+                  Flexible(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Center(child: Text("Questions")),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Text(
+                            "Section A",
+                            style: TextStyle(
+                                color: Colors.blue[800], fontSize: 24),
+                          ),
+                          Card(
+                            child: Column(
+                              children: [
+                                EasyContainer(
+                                  alignment: Alignment.topLeft,
+                                  color: Colors.blue[600],
+                                  child: Text(
+                                    'Q1',
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                                  Text("Answer in 100 words"),
-                                  const Divider(),
-                                  Text(" a) This is a question 1"),
-                                  Row(
-                                    children: [
-                                      EasyContainer(
-                                        child: Text("Show annotations"),
-                                      ),
-                                      // EasyContainer(),
-                                      Text("/"),
-                                      EasyContainer(
-                                        child: Text("10"),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                                ),
+                                Text("Answer in 100 words"),
+                                const Divider(),
+                                Text(" a) This is a question 1"),
+                                Row(
+                                  children: [
+                                    EasyContainer(
+                                      child: Text("Show annotations"),
+                                    ),
+                                    // EasyContainer(),
+                                    Text("/"),
+                                    EasyContainer(
+                                      child: Text("10"),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Flexible(
-                        flex: 8,
-                        child: PlatformUtils.isAndroid()
-                            ? Stack(
-                                children: [
-                                  PlatformViewLink(
-                                      viewType: viewType,
-                                      surfaceFactory: (BuildContext context,
-                                          PlatformViewController controller) {
-                                        return AndroidViewSurface(
-                                          controller: controller
-                                              as AndroidViewController,
-                                          gestureRecognizers: const <
-                                              Factory<
-                                                  OneSequenceGestureRecognizer>>{},
-                                          hitTestBehavior:
-                                              PlatformViewHitTestBehavior
-                                                  .opaque,
-                                        );
-                                      },
-                                      onCreatePlatformView:
-                                          (PlatformViewCreationParams params) {
-                                        debugPrint(
-                                            "viewId ${params.toString()}");
-                                        return PlatformViewsService
-                                            .initSurfaceAndroidView(
-                                          id: params.id,
-                                          viewType: viewType,
-                                          layoutDirection: TextDirection.ltr,
-                                          creationParams: creationParams,
-                                          creationParamsCodec:
-                                              const StandardMessageCodec(),
-                                          onFocus: () {
-                                            params.onFocusChanged(true);
-                                          },
-                                        )
-                                          ..addOnPlatformViewCreatedListener(
-                                              params.onPlatformViewCreated)
-                                          ..addOnPlatformViewCreatedListener(
-                                              onPlatformViewCreated)
-                                          ..create();
-                                      }),
-                                  // Positioned(
-                                  //   bottom: 20,
-                                  //   child: SizedBox(
-                                  //       height: 24,
-                                  //       width: 24,
-                                  //       child: IconButton(
-                                  //           onPressed: () async {
-                                  //             final extractedDocument =
-                                  //                 await extractAsset(context,
-                                  //                     'PDFs/PSPDFKit.pdf');
-                                  //             await Pspdfkit.present(
-                                  //                 extractedDocument.path,
-                                  //                 {startPage: 2});
-                                  //           },
-                                  //           icon: Icon(Icons.add))),
-                                  // ),
-                                  // Positioned(
-                                  //   bottom: 20,
-                                  //   right: 20,
-                                  //   child: SizedBox(
-                                  //       height: 24,
-                                  //       width: 24,
-                                  //       child: IconButton(
-                                  //           onPressed: () {},
-                                  //           icon: Icon(Icons.minimize))),
-                                  // ),
-                                ],
-                              )
-                            : UiKitView(
-                                viewType: viewType,
-                                layoutDirection: TextDirection.ltr,
-                                creationParams: creationParams,
-                                onPlatformViewCreated: onPlatformViewCreated,
-                                creationParamsCodec:
-                                    const StandardMessageCodec())),
-                    Flexible(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                            child: Column(children: <Widget>[
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Text("Annotations"),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          ElevatedButton(
-                              onPressed: () async {
-                                debugPrint("pageIndex $pageIndex");
-                                // await view.addAnnotation(annotationJsonHashMap);
-                                // // To test the `view#addAnnotation` method with an InstantJSON string
-                                // // simply use `annotationJsonString` instead or `annotationJsonHashMap`.
-                                await view
-                                    .addAnnotation(annotationJsonString());
+                  ),
+                  Flexible(
+                      flex: 8,
+                      child: PlatformUtils.isAndroid()
+                          ? PlatformViewLink(
+                              viewType: viewType,
+                              surfaceFactory: (BuildContext context,
+                                  PlatformViewController controller) {
+                                return AndroidViewSurface(
+                                  controller: controller
+                                      as AndroidViewController,
+                                  gestureRecognizers: const <
+                                      Factory<
+                                          OneSequenceGestureRecognizer>>{},
+                                  hitTestBehavior:
+                                      PlatformViewHitTestBehavior
+                                          .opaque,
+                                );
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Text(
-                                    'Add Content for a text annotation text 1'),
-                              )),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ElevatedButton(
-                              onPressed: () async {
-                                // await view.addAnnotation(annotationJsonHashMap);
-                                // // To test the `view#addAnnotation` method with an InstantJSON string
-                                // // simply use `annotationJsonString` instead or `annotationJsonHashMap`.
-                                await view
-                                    .addAnnotation(annotationJsonString2());
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Text(
-                                    'Add Content for a text annotation text 2'),
-                              )),
-                          // if (PlatformUtils.isIOS())
-                          //   ElevatedButton(
-                          //       onPressed: () async {
-                          //         dynamic annotationsJson =
-                          //             await view.getAnnotations(0, 'all');
-                          //         await view.removeAnnotation({
-                          //           'uuid': annotationsJson[0]['uuid'] as String
-                          //         });
-                          //       },
-                          //       child: const Text('Remove Annotation')),
-                          // ElevatedButton(
-                          //     onPressed: () async {
-                          //       const title = 'Annotation JSON';
-                          //       dynamic annotationsJson =
-                          //           await view.getAnnotations(0, 'all');
-                          //       await showDialog<AlertDialog>(
-                          //           context: context,
-                          //           builder: (BuildContext context) =>
-                          //               AlertDialog(
-                          //                   title: const Text(title),
-                          //                   content: Text('$annotationsJson'),
-                          //                   actions: [
-                          //                     TextButton(
-                          //                         onPressed: () {
-                          //                           Navigator.of(context).pop();
-                          //                         },
-                          //                         child: const Text('OK'))
-                          //                   ]));
-                          //     },
-                          //     child: const Text('Get Annotations')),
-                          // ElevatedButton(
-                          // onPressed: () async {
-                          //   const title = 'Unsaved Annotations';
-                          //   dynamic annotationsJson =
-                          //       await view.getAllUnsavedAnnotations();
-                          //   print(annotationsJson);
-                          //   await showDialog<AlertDialog>(
-                          //       context: context,
-                          //       builder: (BuildContext context) =>
-                          //           AlertDialog(
-                          //             title: const Text(title),
-                          //             content: Text('$annotationsJson'),
-                          //             actions: [
-                          //               TextButton(
-                          //                   onPressed: () {
-                          //                     Navigator.of(context).pop();
-                          //                   },
-                          //                   child: const Text('OK'))
-                          //             ],
-                          //           ));
-                          // },
-                          // child: const Text('Get All Unsaved Annotations'))
-                        ])),
-                      ),
-                    )
-                  ]))),
-            )),
+                              onCreatePlatformView:
+                                  (PlatformViewCreationParams params) {
+                                debugPrint(
+                                    "viewId ${params.toString()}");
+                                return PlatformViewsService
+                                    .initSurfaceAndroidView(
+                                  id: params.id,
+                                  viewType: viewType,
+                                  layoutDirection: TextDirection.ltr,
+                                  creationParams: creationParams,
+                                  creationParamsCodec:
+                                      const StandardMessageCodec(),
+                                  onFocus: () {
+                                    params.onFocusChanged(true);
+                                  },
+                                )
+                                  ..addOnPlatformViewCreatedListener(
+                                      params.onPlatformViewCreated)
+                                  ..addOnPlatformViewCreatedListener(
+                                      onPlatformViewCreated)
+                                  ..create();
+                              })
+                          : UiKitView(
+                              viewType: viewType,
+                              layoutDirection: TextDirection.ltr,
+                              creationParams: creationParams,
+                              onPlatformViewCreated: onPlatformViewCreated,
+                              creationParamsCodec:
+                                  const StandardMessageCodec())),
+                  Flexible(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                          child: Column(children: <Widget>[
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text("Annotations"),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              debugPrint("pageIndex $pageIndex");
+                              await Clipboard.setData(ClipboardData(
+                                  text: "This is a text annotation 1"));
+                              // await view.addAnnotation(annotationJsonHashMap);
+                              // // To test the `view#addAnnotation` method with an InstantJSON string
+                              // // simply use `annotationJsonString` instead or `annotationJsonHashMap`.
+                              // await view
+                              //     .addAnnotation(annotationJsonString());
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text(
+                                  'Add Content for a text annotation text 1, copy and add'),
+                            )),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              // await view.addAnnotation(annotationJsonHashMap);
+                              // // To test the `view#addAnnotation` method with an InstantJSON string
+                              // // simply use `annotationJsonString` instead or `annotationJsonHashMap`.
+                              await view
+                                  .addAnnotation(annotationJsonString2());
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text(
+                                  'Add Content for a text annotation text 2'),
+                            )),
+                        // if (PlatformUtils.isIOS())
+                        //   ElevatedButton(
+                        //       onPressed: () async {
+                        //         dynamic annotationsJson =
+                        //             await view.getAnnotations(0, 'all');
+                        //         await view.removeAnnotation({
+                        //           'uuid': annotationsJson[0]['uuid'] as String
+                        //         });
+                        //       },
+                        //       child: const Text('Remove Annotation')),
+                        // ElevatedButton(
+                        //     onPressed: () async {
+                        //       const title = 'Annotation JSON';
+                        //       dynamic annotationsJson =
+                        //           await view.getAnnotations(0, 'all');
+                        //       await showDialog<AlertDialog>(
+                        //           context: context,
+                        //           builder: (BuildContext context) =>
+                        //               AlertDialog(
+                        //                   title: const Text(title),
+                        //                   content: Text('$annotationsJson'),
+                        //                   actions: [
+                        //                     TextButton(
+                        //                         onPressed: () {
+                        //                           Navigator.of(context).pop();
+                        //                         },
+                        //                         child: const Text('OK'))
+                        //                   ]));
+                        //     },
+                        //     child: const Text('Get Annotations')),
+                        // ElevatedButton(
+                        // onPressed: () async {
+                        //   const title = 'Unsaved Annotations';
+                        //   dynamic annotationsJson =
+                        //       await view.getAllUnsavedAnnotations();
+                        //   print(annotationsJson);
+                        //   await showDialog<AlertDialog>(
+                        //       context: context,
+                        //       builder: (BuildContext context) =>
+                        //           AlertDialog(
+                        //             title: const Text(title),
+                        //             content: Text('$annotationsJson'),
+                        //             actions: [
+                        //               TextButton(
+                        //                   onPressed: () {
+                        //                     Navigator.of(context).pop();
+                        //                   },
+                        //                   child: const Text('OK'))
+                        //             ],
+                        //           ));
+                        // },
+                        // child: const Text('Get All Unsaved Annotations'))
+                      ])),
+                    ),
+                  )
+                ])))),
       );
     } else {
       return Text(

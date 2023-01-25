@@ -25,7 +25,7 @@ import 'pspdfkit_annotations_example.dart';
 import 'pspdfkit_manual_save_example.dart';
 import 'pspdfkit_annotation_processing_example.dart';
 
-const String _documentPath = 'PDFs/PSPDFKit.pdf';
+const String _documentPath = 'PDFs/EDUKEMY GOPT P1 29 AUG.pdf';
 const String _lockedDocumentPath = 'PDFs/protected.pdf';
 const String _imagePath = 'PDFs/PSPDFKit_Image_Example.jpg';
 const String _formPath = 'PDFs/Form_example.pdf';
